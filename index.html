@@ -313,6 +313,28 @@
       visibility: visible;
     }
 
+    @media (max-width: 640px) {
+      .panel {
+        inset: auto 10px 64px 10px;
+        width: auto;
+        max-height: 52vh;
+        padding: 14px;
+        border-radius: 14px;
+      }
+
+      .panel h2 {
+        margin-bottom: 8px;
+      }
+
+      .field {
+        margin-bottom: 8px;
+      }
+
+      .button-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .panel h2 {
       margin: 0 0 12px;
       color: var(--gold-soft);
@@ -634,10 +656,29 @@
         return data;
       }
 
-      function invitationUrl() {
+      function invitationUrl(data) {
         const url = new URL(window.location.href);
         url.searchParams.delete("sender");
+        url.searchParams.delete("v");
+        url.searchParams.set("guest", data.guestName);
+        url.searchParams.set("gn", data.guestNumber);
+        url.searchParams.set("table", data.tableNumber);
+        url.searchParams.set("seat", data.seatNumber);
+        url.searchParams.set("pass", data.passCode);
         return url.toString();
+      }
+
+      function populateFieldsFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const guest = params.get("guest") || "";
+        const guestNumber = params.get("gn") || "";
+        const tableNumber = params.get("table") || "";
+        const seatNumber = params.get("seat") || "";
+
+        if (guest) fields.guestName.value = guest;
+        if (guestNumber) fields.guestNumber.value = guestNumber.replace(/\D/g, "");
+        if (tableNumber) fields.tableNumber.value = tableNumber.replace(/\D/g, "");
+        if (seatNumber) fields.seatNumber.value = seatNumber.replace(/\D/g, "");
       }
 
       function whatsappUrl(data) {
@@ -664,7 +705,7 @@
           "",
           "Invitation Link:",
           "",
-          invitationUrl()
+          invitationUrl(data)
         ].join("\n");
 
         return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
@@ -749,6 +790,7 @@
 
       document.getElementById("previewButton").addEventListener("click", () => {
         updateSecurityPass();
+        senderPanel.classList.remove("is-open");
         openExperience();
         goToSlide(4);
       });
@@ -780,6 +822,7 @@
         openSenderPanel();
       }
 
+      populateFieldsFromUrl();
       preloadImages();
       createAmbientEffects();
       updateSecurityPass();
