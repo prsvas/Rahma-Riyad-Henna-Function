@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Henna Night - Swahili Edition</title>
   <meta name="description" content="Luxury Swahili Islamic Henna Night e-Invitation">
+  <meta property="og:title" content="Rahma Riyadh Kisuo - Henna Night">
+  <meta property="og:description" content="You are cordially invited to Rahma Riyadh Kisuo's Henna Night celebration.">
+  <meta property="og:image" content="https://prsvas.github.io/Rahma-Riyad-Henna-Function/assets/social-preview.jpg">
+  <meta property="og:url" content="https://prsvas.github.io/Rahma-Riyad-Henna-Function/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Rahma Riyadh Kisuo - Henna Night">
+  <meta name="twitter:description" content="You are cordially invited to Rahma Riyadh Kisuo's Henna Night celebration.">
+  <meta name="twitter:image" content="https://prsvas.github.io/Rahma-Riyad-Henna-Function/assets/social-preview.jpg">
+  <link rel="shortcut icon" href="favicon.ico">
   <link rel="icon" href="assets/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
@@ -537,7 +547,7 @@
         <button id="previewButton" type="button">Preview Invitation</button>
         <button id="sendButton" type="button">Send via WhatsApp</button>
       </div>
-      <p class="hint">Pass Code is generated automatically, for example HN-023-T05-S02. Open this panel with the S button or add <strong>?sender=1</strong> to the link.</p>
+      <p class="hint">Pass Code is generated automatically, for example HN-00023. Table is shown separately, for example T-05. Open this panel with the S button or add <strong>?sender=1</strong> to the link.</p>
     </aside>
   </main>
 
@@ -598,16 +608,18 @@
       }
 
       function getGuestData() {
-        const guestNumber = pad(fields.guestNumber.value, 3);
+        const guestNumber = pad(fields.guestNumber.value, 5);
         const tableNumber = pad(fields.tableNumber.value, 2);
         const seatNumber = pad(fields.seatNumber.value, 2);
-        const passCode = `HN-${guestNumber}-T${tableNumber}-S${seatNumber}`;
+        const passCode = `HN-${guestNumber}`;
+        const tableCode = `T-${tableNumber}`;
 
         return {
           guestName: fields.guestName.value.trim(),
           mobileNumber: fields.mobileNumber.value.replace(/[^\d+]/g, ""),
           guestNumber,
           tableNumber,
+          tableCode,
           seatNumber,
           passCode
         };
@@ -616,8 +628,8 @@
       function updateSecurityPass() {
         const data = getGuestData();
         output.guestName.textContent = data.guestName || "";
-        output.passCode.textContent = fields.guestNumber.value || fields.tableNumber.value || fields.seatNumber.value ? data.passCode : "";
-        output.table.textContent = fields.tableNumber.value ? `T${data.tableNumber}` : "";
+        output.passCode.textContent = fields.guestNumber.value ? data.passCode : "";
+        output.table.textContent = fields.tableNumber.value ? data.tableCode : "";
         output.seat.textContent = fields.seatNumber.value ? `S${data.seatNumber}` : "";
         return data;
       }
@@ -639,7 +651,7 @@
           "",
           "Your reserved seating:",
           "",
-          `Table T${data.tableNumber}`,
+          `Table ${data.tableCode}`,
           `Seat S${data.seatNumber}`,
           "",
           "Pass Code:",
